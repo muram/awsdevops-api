@@ -39,8 +39,8 @@ jobs:
       - run:
           name: Test
           command: yarn test
-  # Deploy it
-  deploy:
+  # Deploy to staging
+  deploy_staging:
     <<: *defaults
     steps:
       - attach_workspace:
@@ -49,8 +49,35 @@ jobs:
       - setup_remote_docker
       - run:
           name: Set ENV Variables
+          # Sets the STAGING specific values to be used in deploy.sh
           command: |
-            echo 'export IMAGE=$AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/awsdevops/api' >> $BASH_ENV
+            echo 'export IMAGE=$AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$STAGING_IMAGE_REPO' >> $BASH_ENV
+            echo 'export TASK_DEFINITION=$STAGING_TASK_DEFINITION' >> $BASH_ENV
+            echo 'export SERVICE=$STAGING_SERVICE' >> $BASH_ENV
+            echo 'export CLUSTER=$STAGING_CLUSTER' >> $BASH_ENV
+      - run:
+          name: build image and deploy
+          # optionally, you could batch those exports here without using $BASH_ENV.  But just to keep it separate...
+          command: |
+            chmod +x ./deploy.sh
+            ./deploy.sh
+
+  # Deploy to production
+  deploy_production:
+    <<: *defaults
+    steps:
+      - attach_workspace:
+          at: .
+      # necessary to hook into docker
+      - setup_remote_docker
+      - run:
+          name: Set ENV Variables
+          # Sets the PRODUCTION specific values to be used in deploy.sh
+          command: |
+            echo 'export IMAGE=$AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$PRODUCTION_IMAGE_REPO' >> $BASH_ENV
+            echo 'export TASK_DEFINITION=$PRODUCTION_TASK_DEFINITION' >> $BASH_ENV
+            echo 'export SERVICE=$PRODUCTION_SERVICE' >> $BASH_ENV
+            echo 'export CLUSTER=$PRODUCTION_CLUSTER' >> $BASH_ENV
       - run:
           name: build image and deploy
           command: |
@@ -65,10 +92,17 @@ workflows:
       - test:
           requires:
             - install
-      - deploy:
+      - deploy_staging:
           requires:
             - test
           filters:
             branches:
               only:
                 - staging
+      - deploy_production:
+          requires:
+            - test
+          filters:
+            branches:
+              only:
+                - master
