@@ -3,8 +3,8 @@
     "mountPath": "/explorer",
     "generateOperationScopedModels": true,
     "apiInfo": {
-      "title": "User API",
-      "description": "manage clients (users) from within your application."
+      "title": "The API CI/CD for Staging AND Production",
+      "description": "ship 📦 to staging then unleash 🔥 into production."
     }
   }
 }

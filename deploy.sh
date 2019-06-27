@@ -1,10 +1,5 @@
 #!/usr/bin/env bash
 
-# CHANGE THESE TO MATCH YOUR RESOURCE NAMES AND VALUES
-TASK_DEFINITION="awsdevops-api"
-SERVICE="api"
-CLUSTER="awsdevops-cluster"
-
 # exit if the script fails
 set -e
 
@@ -24,12 +19,12 @@ docker push $IMAGE:$CIRCLE_SHA1
 echo "Updating service ..."
 
 # Get current task definition as base of the update
-aws ecs describe-task-definition --task-definition $TASK_DEFINITION >> base.json
+aws ecs describe-task-definition --task-definition $TASK_DEFINITION >>base.json
 
 # Exit if the base.json file fails to populate
 if [ ! -f ./base.json ]; then
-    echo "base.json not found!"
-    exit 1
+  echo "base.json not found!"
+  exit 1
 fi
 
 # Create updated task file at file://update-task.json that we'll make shortly
@@ -37,8 +32,8 @@ node ./create-updated-task.js
 
 # Exit if the updated file fails to populate
 if [ ! -f ./updated-task.json ]; then
-    echo "updated-task.json not found!"
-    exit 1
+  echo "updated-task.json not found!"
+  exit 1
 fi
 
 aws ecs register-task-definition --cli-input-json file://updated-task.json
