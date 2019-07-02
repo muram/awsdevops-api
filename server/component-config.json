@@ -4,7 +4,7 @@
     "generateOperationScopedModels": true,
     "apiInfo": {
       "title": "The API CI/CD for Staging AND Production",
-      "description": "ship 📦 to staging then unleash 🔥 into production."
+      "description": "ship 📦 to staging then unleash 🔥 into production.\n\n## Changelog:\n\n### 2019-07-01\n\n- Updates to the technologies used in Week 1.\n- Removed the Widget model."
     }
   }
 }
