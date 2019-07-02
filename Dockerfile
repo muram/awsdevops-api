@@ -1,9 +1,9 @@
-FROM node:10.15.3-alpine
+FROM node:10.16.0-alpine
 
 ENV AWS_CLI_VERSION 1.16.125
 
 RUN apk --no-cache update && \
-  apk --no-cache add python py-pip py-setuptools ca-certificates groff less && \
+  apk --no-cache add python py-pip py-setuptools ca-certificates groff less make g++ && \
   pip --no-cache-dir install awscli==${AWS_CLI_VERSION} && \
   rm -rf /var/cache/apk/*
 

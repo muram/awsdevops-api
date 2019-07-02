@@ -19,35 +19,6 @@
     }
   },
   "validations": [],
-  "relations": {
-    "widgets": {
-      "type": "hasMany",
-      "model": "Widget",
-      "foreignKey": ""
-    }
-  },
-  "acls": [
-    {
-      "accessType": "WRITE",
-      "principalType": "ROLE",
-      "principalId": "$authenticated",
-      "permission": "ALLOW",
-      "property": "__create__widgets"
-    },
-    {
-      "accessType": "*",
-      "principalType": "ROLE",
-      "principalId": "$owner",
-      "permission": "ALLOW",
-      "property": [
-        "__get__widgets",
-        "__updateById__widgets",
-        "__delete__widgets",
-        "__findById__widgets",
-        "__destroyById__widgets",
-        "__count__widgets"
-      ]
-    }
-  ],
+  "relations": {},
   "methods": {}
 }
